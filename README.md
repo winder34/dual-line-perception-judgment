@@ -231,6 +231,14 @@ python -m tools.serve_dual_line_demo --device cpu
 - [실험 로그](docs/dual_line_experiment_log_ko.md)
 - [모듈화 목표](docs/modularization_goal_ko.md)
 
+## 사용 범위
+
+이 저장소는 포트폴리오 검토와 기술 데모를 목적으로 공개합니다.
+
+별도의 서면 허가 없이 소스 코드와 학습 아티팩트를 복제, 수정, 재배포하거나 상업적으로 사용하는 것을 허용하지 않습니다. 외부 라이브러리와 사전학습 가중치에는 각 원 저작자의 라이선스가 적용됩니다. 자세한 내용은 [LICENSE.md](LICENSE.md)를 확인해 주세요.
+
+Copyright (c) 2026 winder34. All rights reserved.
+
 ## 공개 저장소 구조
 
 ```text
