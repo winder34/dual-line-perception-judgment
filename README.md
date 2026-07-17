@@ -2,6 +2,12 @@
 
 한 장의 이미지를 입력하면 Parent/Fine 예측을 만들고, 판단 위험이 큰 경우에만 선택적으로 재관측한 뒤 기존 판단을 유지하거나 후보로 전환하는 이미지 분류 데모입니다.
 
+## 실제 추론 예시
+
+![호랑이 이미지의 label-free 재관측 및 판단 전환 결과](docs/images/runtime_trace_tiger_10406_label_free.png)
+
+초기 판단에서 Fine은 `tiger`를 유지했지만 Parent는 `dog_like`로 분류했습니다. 위험 탐지 후 `fine_context` 영역을 재관측했고, 후보 증거의 유효성이 높아져 최종 Parent 판단을 `big_cat`으로 전환했습니다. 이 과정에서 정답 라벨, 파일명, 폴더명은 런타임 판단에 사용되지 않습니다.
+
 ```text
 Raw image
   -> Parent / Fine base prediction
