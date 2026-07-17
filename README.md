@@ -2,11 +2,46 @@
 
 한 장의 이미지를 입력하면 Parent/Fine 예측을 만들고, 판단 위험이 큰 경우에만 선택적으로 재관측한 뒤 기존 판단을 유지하거나 후보로 전환하는 이미지 분류 데모입니다.
 
+## 프로젝트 개요
+
+일반적인 단일 이미지 분류기는 한 번의 관측에서 얻은 표현과 confidence로 최종 답을 결정합니다. 이 프로젝트는 **높은 confidence를 가진 오답도 존재한다**는 문제에서 출발해, 모든 이미지를 반복 처리하는 대신 판단이 불안정한 입력만 선별하여 다시 관측하는 구조를 설계했습니다.
+
+핵심은 객체의 넓은 정체성을 보는 `Parent`와 세부적인 클래스 차이를 보는 `Fine`을 독립적인 증거 표현으로 유지하고, 별도의 판단 계층이 두 표현의 상태와 재관측 후보를 비교하도록 한 것입니다.
+
+### 핵심 구성
+
+- **독립 증거 표현**: 공통 Backbone 출력에서 Parent/Fine 예측과 공간 attention을 각각 생성
+- **TRAIN-OOF 위험 탐지**: TEST 결과로 threshold를 조정하지 않고, 학습 데이터의 out-of-fold 예측으로 판단 위험을 학습
+- **선택적 재관측**: 위험도가 높은 입력에만 attention 기반 tight/context/disagreement view를 생성
+- **후보 비교와 전환 승인**: 기본 판단과 재관측 후보를 동일한 perception stack으로 처리한 뒤, 유효성과 효용이 충분한 경우에만 전환
+- **추론과 평가 분리**: 런타임은 정답 없이 동작하며, accuracy·fixed·broken은 모든 판단이 끝난 뒤 별도 audit에서 계산
+
+```text
+Perception
+  -> Parent / Fine evidence
+  -> OOF-trained risk detection
+  -> Selective reobservation
+  -> Multi-expert candidate comparison
+  -> KEEP / REVIEW_KEEP / SWITCH
+```
+
+### 검증 결과
+
+동일한 10-class TEST 1,000장과 ResNet18 Backbone 조건에서 확인한 결과입니다.
+
+| 지표 | 기본 판단 | 최종 판단 |
+|---|---:|---:|
+| Parent 정확도 | 95.9% | 97.0% |
+| Fine 정확도 | 93.8% | 96.0% |
+| Parent/Fine 동시 정답 | 92.2% | **96.0%** |
+
+재관측은 전체 1,000장 중 103장에만 요청되었으며, 최종 전환 결과는 `40 fixed / 2 broken`이었습니다. 이 수치는 TEST 정답을 런타임 입력으로 사용하지 않고, 추론 완료 후 별도 평가에서 계산했습니다.
+
 ## 실제 추론 예시
 
 ![호랑이 이미지의 label-free 재관측 및 판단 전환 결과](docs/images/runtime_trace_tiger_10406_label_free.png)
 
-초기 판단에서 Fine은 `tiger`를 유지했지만 Parent는 `dog_like`로 분류했습니다. 위험 탐지 후 `fine_context` 영역을 재관측했고, 후보 증거의 유효성이 높아져 최종 Parent 판단을 `big_cat`으로 전환했습니다. 이 과정에서 정답 라벨, 파일명, 폴더명은 런타임 판단에 사용되지 않습니다.
+위 화면은 로컬 데모의 실제 실행 예시입니다. 이미지를 업로드하고 분석을 실행하면 기본 Parent/Fine 예측, 위험 점수, 재관측 여부와 선택 영역, 후보 비교 및 최종 판단을 한 화면에서 확인할 수 있습니다.
 
 ```text
 Raw image
