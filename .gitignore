@@ -1,0 +1,50 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Private data and generated experiments
+dataset/
+results/
+portfolio_*/
+handoff_*/
+*.zip
+
+# Legacy source tree not required by the public demo.
+/src/core/
+
+# Public runtime allow-list: legacy modules remain in the private worktree.
+/src/dual_line/evaluation/
+/src/dual_line/artifacts/*
+!/src/dual_line/artifacts/__init__.py
+!/src/dual_line/artifacts/schema.py
+/src/dual_line/decision/*
+!/src/dual_line/decision/__init__.py
+!/src/dual_line/decision/joint_gate_v216.py
+/src/dual_line/representation/*
+!/src/dual_line/representation/__init__.py
+!/src/dual_line/representation/dino_concept_evidence.py
+!/src/dual_line/representation/dino_observer_relation.py
+/src/dual_line/runtime/*
+!/src/dual_line/runtime/__init__.py
+!/src/dual_line/runtime/single_image_inference.py
+
+# Keep only the reviewed public demo artifact bundle.
+artifacts/*
+!artifacts/demo_cls10/
+!artifacts/demo_cls10/**
+
+# Runtime scratch
+*.log
+tmp/
+temp/

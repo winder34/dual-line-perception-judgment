@@ -1,0 +1,12 @@
+{
+  "persian+cat": "cat",
+  "siamese+cat": "cat",
+  "lion": "big_cat",
+  "tiger": "big_cat",
+  "chihuahua": "dog",
+  "german+shepherd": "dog",
+  "wolf": "dog_like",
+  "fox": "dog_like",
+  "horse": "horse",
+  "deer": "deer"
+}

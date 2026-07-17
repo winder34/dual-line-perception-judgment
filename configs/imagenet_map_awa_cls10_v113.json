@@ -1,0 +1,39 @@
+{
+  "persian+cat": [
+    "Persian cat"
+  ],
+  "siamese+cat": [
+    "Siamese cat"
+  ],
+  "chihuahua": [
+    "Chihuahua"
+  ],
+  "german+shepherd": [
+    "German shepherd"
+  ],
+  "wolf": [
+    "timber wolf",
+    "white wolf",
+    "red wolf"
+  ],
+  "fox": [
+    "red fox",
+    "kit fox",
+    "Arctic fox",
+    "grey fox"
+  ],
+  "lion": [
+    "lion"
+  ],
+  "tiger": [
+    "tiger"
+  ],
+  "horse": [
+    "sorrel"
+  ],
+  "deer": [
+    "hartebeest",
+    "impala",
+    "gazelle"
+  ]
+}

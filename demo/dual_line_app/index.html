@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dual-Line 이미지 판단기</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <strong>Dual-Line</strong>
+      <span>Perception and Judgment</span>
+    </div>
+    <div id="status" class="status"><i></i><span>모델 확인 중</span></div>
+  </header>
+
+  <main class="workspace">
+    <section class="input-pane">
+      <div class="section-title">
+        <div><span>01</span><h1>이미지 입력</h1></div>
+        <p>파일명과 폴더 구조에서 정답 정보를 읽지 않습니다.</p>
+      </div>
+      <label id="dropzone" class="dropzone" for="fileInput">
+        <input id="fileInput" type="file" accept="image/*">
+        <img id="preview" alt="입력 이미지 미리보기">
+        <div id="emptyState" class="empty-state">
+          <b>이미지를 놓거나 선택하세요</b>
+          <span>JPG, PNG, WEBP · 최대 25 MB</span>
+        </div>
+      </label>
+      <div class="input-actions">
+        <span id="filename">선택된 파일 없음</span>
+        <button id="runButton" type="button" disabled>분석 실행</button>
+      </div>
+    </section>
+
+    <section class="result-pane">
+      <div class="section-title">
+        <div><span>02</span><h1>최종 판단</h1></div>
+        <p id="runtimeText">이미지를 입력하면 결과가 표시됩니다.</p>
+      </div>
+      <div id="loading" class="loading" hidden><i></i><span>관측 증거를 계산하고 있습니다.</span></div>
+      <div id="resultEmpty" class="result-empty">대기 중</div>
+      <div id="resultContent" hidden>
+        <div class="prediction-band">
+          <div><small>상위 개념</small><strong id="parentPrediction">-</strong></div>
+          <div><small>세부 클래스</small><strong id="finePrediction">-</strong></div>
+          <div id="decisionBadge" class="decision-badge">KEEP</div>
+        </div>
+
+        <div class="gate-grid">
+          <div class="metric"><span>Risk score</span><b id="riskScore">-</b><em id="riskThreshold">-</em></div>
+          <div class="metric"><span>Base validity</span><b id="baseValidity">-</b></div>
+          <div class="metric"><span>Candidate validity</span><b id="candidateValidity">-</b></div>
+          <div class="metric"><span>Utility</span><b id="utility">-</b><em id="utilityThreshold">-</em></div>
+        </div>
+
+        <div class="decision-flow">
+          <div><span>기본 판단</span><b id="baseDecision">-</b></div>
+          <i>→</i>
+          <div><span>Gate</span><b id="gateDecision">-</b></div>
+          <i>→</i>
+          <div><span>선택 view</span><b id="chosenView">-</b></div>
+        </div>
+
+        <div class="visual-grid">
+          <figure><figcaption>선택 영역</figcaption><img id="overlayImage" alt="선택 영역 표시"></figure>
+          <figure id="cropFigure"><figcaption>재관측 crop</figcaption><img id="cropImage" alt="재관측 crop"></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="details">
+    <nav class="tabs" aria-label="상세 결과">
+      <button class="tab active" data-tab="gate">Gate 상세</button>
+      <button class="tab" data-tab="candidates">재관측 후보</button>
+      <button class="tab" data-tab="probabilities">Top-3 예측</button>
+      <button class="tab" data-tab="raw">Raw JSON</button>
+    </nav>
+    <div id="gatePanel" class="tab-panel active">
+      <table><tbody id="gateTable"></tbody></table>
+    </div>
+    <div id="candidatesPanel" class="tab-panel">
+      <table><thead><tr><th>View</th><th>Parent</th><th>Fine</th><th>Score</th><th>Joint</th><th>선택</th></tr></thead><tbody id="candidateTable"></tbody></table>
+    </div>
+    <div id="probabilitiesPanel" class="tab-panel probability-columns">
+      <div><h2>Parent Top-3</h2><ol id="parentTop3"></ol></div>
+      <div><h2>Fine Top-3</h2><ol id="fineTop3"></ol></div>
+    </div>
+    <div id="rawPanel" class="tab-panel"><pre id="rawJson">{}</pre></div>
+  </section>
+
+  <aside class="demo-scope" aria-labelledby="demoScopeTitle">
+    <h2 id="demoScopeTitle">현재 데모의 클래스 범위</h2>
+    <p>현재 공개 데모와 제공된 학습 아티팩트는 <strong>10-class 실험 구성</strong>에 맞춰져 있습니다.</p>
+    <p><strong>지원 클래스:</strong> Persian cat, Siamese cat, Chihuahua, German shepherd, wolf, fox, lion, tiger, horse, deer</p>
+    <p>다른 클래스 구성으로 확장하려면 새 학습 구성에서 <code>class manifest</code>, <code>Parent/Fine mapping</code>, <code>OOF profile</code>, <code>correction artifact</code>를 다시 생성해야 합니다.</p>
+  </aside>
+
+  <script src="/app.js"></script>
+</body>
+</html>
